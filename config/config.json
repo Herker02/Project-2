@@ -1,7 +1,11 @@
 {
   "development": {
     "username": "root",
+<<<<<<< HEAD
     "password": "0979776892",
+=======
+    "password": null,
+>>>>>>> origin
     "database": "exampledb",
     "host": "localhost",
     "dialect": "mysql"
