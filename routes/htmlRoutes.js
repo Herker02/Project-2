@@ -5,7 +5,7 @@ module.exports = function(app) {
   app.get("/", function(req, res) {
     db.Example.findAll({}).then(function(dbExamples) {
       res.render("index", {
-        msg: "Welcome!",
+        msg: "Playlist Creator",
         examples: dbExamples
       });
     });
@@ -16,6 +16,13 @@ module.exports = function(app) {
     db.Example.findOne({ where: { id: req.params.id } }).then(function(dbExample) {
       res.render("example", {
         example: dbExample
+      });
+    });
+  });
+  app.get("/songs/:id", function(req, res) {
+    db.Song.findOne({ where: { id: req.params.id } }).then(function(dbSong) {
+      res.render("example", {
+        Song: dbSong
       });
     });
   });
