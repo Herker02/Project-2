@@ -1,99 +1,115 @@
-// Get references to page elements
-var $exampleText = $("#example-text");
-var $exampleDescription = $("#example-description");
-var $submitBtn = $("#submit");
-var $exampleList = $("#example-list");
+var audio;
 
-// The API object contains methods for each kind of request we'll make
-var API = {
-  saveExample: function(example) {
-    return $.ajax({
-      headers: {
-        "Content-Type": "application/json"
-      },
-      type: "POST",
-      url: "api/examples",
-      data: JSON.stringify(example)
-    });
-  },
-  getExamples: function() {
-    return $.ajax({
-      url: "api/examples",
-      type: "GET"
-    });
-  },
-  deleteExample: function(id) {
-    return $.ajax({
-      url: "api/examples/" + id,
-      type: "DELETE"
-    });
-  }
-};
+//Hide Pause Initially
+$("#pause").hide();
 
-// refreshExamples gets new examples from the db and repopulates the list
-var refreshExamples = function() {
-  API.getExamples().then(function(data) {
-    var $examples = data.map(function(example) {
-      var $a = $("<a>")
-        .text(example.text)
-        .attr("href", "/example/" + example.id);
+//Initializer - Play First Song
+initAudio($("#playlist li:first-child"));
 
-      var $li = $("<li>")
-        .attr({
-          class: "list-group-item",
-          "data-id": example.id
-        })
-        .append($a);
+function initAudio(element) {
+  var song = element.attr("song");
+  var title = element.text();
+  var cover = element.attr("cover");
+  var artist = element.attr("artist");
 
-      var $button = $("<button>")
-        .addClass("btn btn-danger float-right delete")
-        .text("ｘ");
+  //Create a New Audio Object
+  audio = new Audio('media/' + song);
 
-      $li.append($button);
-
-      return $li;
-    });
-
-    $exampleList.empty();
-    $exampleList.append($examples);
-  });
-};
-
-// handleFormSubmit is called whenever we submit a new example
-// Save the new example to the db and refresh the list
-var handleFormSubmit = function(event) {
-  event.preventDefault();
-
-  var example = {
-    text: $exampleText.val().trim(),
-    description: $exampleDescription.val().trim()
-  };
-
-  if (!(example.text && example.description)) {
-    alert("You must enter an example text and description!");
-    return;
+  if (!audio.currentTime) {
+    $("#duration").html("0.00");
   }
 
-  API.saveExample(example).then(function() {
-    refreshExamples();
+  $("#audio-player .title").text(title);
+  $("#audio-player .artist").text(artist);
+
+  //Insert Cover Image
+  $("img.cover").attr("src", "images/covers/" + cover);
+
+  $("#playlist li").removeClass("active");
+  element.addClass("active");
+}
+
+
+//Play Button
+$("#play").click(function () {
+  audio.play();
+  $("#play").hide();
+  $("#pause").show();
+  $("#duration").fadeIn(400);
+  showDuration();
+});
+
+//Pause Button
+$("#pause").click(function () {
+  audio.pause();
+  $("#pause").hide();
+  $("#play").show();
+});
+
+//Stop Button
+$("#stop").click(function () {
+  audio.pause();
+  audio.currentTime = 0;
+  $("#pause").hide();
+  $("#play").show();
+  $("#duration").fadeOut(400);
+});
+
+//Next Button
+$("#next").click(function () {
+  audio.pause();
+  var next = $("#playlist li.active").next();
+  if (next.length == 0) {
+    next = $("#playlist li:first-child");
+  }
+  initAudio(next);
+  audio.play();
+  showDuration();
+});
+
+//Prev Button
+$("#prev").click(function () {
+  audio.pause();
+  var prev = $("#playlist li.active").prev();
+  if (prev.length == 0) {
+    prev = $("#playlist li:last-child");
+  }
+  initAudio(prev);
+  audio.play();
+  showDuration();
+});
+
+//Playlist Song Click
+$("#playlist li").click(function () {
+  audio.pause();
+  initAudio($(this));
+  $("#play").hide();
+  $("#pause").show();
+  $("#duration").fadeIn(400);
+  audio.play();
+  showDuration();
+});
+
+//Volume Control
+$("#volume").change(function () {
+  audio.volume = parseFloat(this.value / 10);
+});
+
+//Time Duration
+function showDuration() {
+  $(audio).bind("timeupdate", function () {
+    //Get hours and minutes
+    var s = parseInt(audio.currentTime % 60);
+    var m = parseInt((audio.currentTime / 60) % 60);
+    //Add 0 if seconds less than 10
+    if (s < 10) {
+      s = "0" + s;
+    }
+    $("#duration").html(m + "." + s);
+    var value = 0;
+    if (audio.currentTime > 0) {
+      value = Math.floor((100 / audio.duration) * audio.currentTime);
+    }
+    $("#progress").css("width", value + "%");
   });
-
-  $exampleText.val("");
-  $exampleDescription.val("");
-};
-
-// handleDeleteBtnClick is called when an example's delete button is clicked
-// Remove the example from the db and refresh the list
-var handleDeleteBtnClick = function() {
-  var idToDelete = $(this)
-    .parent()
-    .attr("data-id");
-
-  API.deleteExample(idToDelete).then(function() {
-    refreshExamples();
-  });
-};
-
-// Add event listeners to the submit and delete buttons
-$submitBtn.on("click", handleFormSubmit);
-$exampleList.on("click", ".delete", handleDeleteBtnClick);
+}
