@@ -7,10 +7,10 @@
 // };
 
 module.exports = function(sequelize, DataTypes) {
-  var Author = sequelize.define("Author", {
+  var Author = sequelize.define("author", {
     // Giving the Author model a name of type STRING
-    playlistName: DataTypes.STRING,
-    typeOfPlaylist: DataTypes.STRING
+    playlist_name: DataTypes.STRING,
+    type_of_playlist: DataTypes.STRING
   });
 
   Author.associate = function(models) {

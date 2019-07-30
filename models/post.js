@@ -1,6 +1,6 @@
 module.exports = function(sequelize, DataTypes) {
     var Post = sequelize.define("Post", {
-      songTitle: {
+      song_title: {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {

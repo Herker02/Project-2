@@ -1,7 +1,7 @@
 var db = require("../models");
 
 module.exports = function(app) {
-  // Find all Authors and return them to the user with res.json
+  // Find all playlist and return them to the user with res.json
   app.get("/api/author", function(req, res) {
     db.Author.findAll({}).then(function(dbAuthor) {
       res.json(dbAuthor);

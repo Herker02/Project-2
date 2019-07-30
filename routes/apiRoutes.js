@@ -5,7 +5,7 @@ var db = require("../models");
 // =============================================================
 module.exports = function(app) {
 
-  // GET route for getting all of the todos
+  // GET route for getting all of the playlist(dbTodo)
   app.get("/api/author", function(req, res) {
     // findAll returns all entries for a table when used with no options
     db.Todo.findAll({}).then(function(dbTodo) {
@@ -26,14 +26,30 @@ module.exports = function(app) {
       });
   });
 
-  // POST route for saving a new todo
+  // POST route for saving a new playlist
   app.post("/api/author", function(req, res) {
     console.log(req.body);
     // create takes an argument of an object describing the item we want to
     // insert into our table. In this case we just we pass in an object with a text
     // and complete property (req.body)
     db.Todo.create({
-      title: req.body.title,
+      playlist_name: req.body.playlist_name,
+      type_of_playlist: req.body.type_of_playlist,
+    })
+    .then(function(dbTodo) {
+      // We have access to the new todo as an argument inside of the callback function
+      res.json(dbTodo);
+    });
+  });
+
+  // POST route for saving a new song
+  app.post("/api/post", function(req, res) {
+    console.log(req.body);
+    // create takes an argument of an object describing the item we want to
+    // insert into our table. In this case we just we pass in an object with a text
+    // and complete property (req.body)
+    db.Todo.create({
+      song_title: req.body.song_title,
       artist: req.body.artist,
       genre: req.body.genre
     })
