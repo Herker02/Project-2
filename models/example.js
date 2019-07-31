@@ -7,19 +7,19 @@
 // };
 
 module.exports = function(sequelize, DataTypes) {
-  var Author = sequelize.define("author", {
+  var example = sequelize.define("example", {
     // Giving the Author model a name of type STRING
     playlist_name: DataTypes.STRING,
     type_of_playlist: DataTypes.STRING
   });
 
-  Author.associate = function(models) {
+  example.associate = function(models) {
     // Associating Author with Posts
     // When an Author is deleted, also delete any associated Posts
-    Author.hasMany(models.Post, {
+    example.hasMany(models.pldata, {
       onDelete: "cascade"
     });
   };
 
-  return Author;
+  return example;
 };
