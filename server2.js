@@ -23,7 +23,7 @@ app.post("/upload", function(req, res) {
   console.log("req.files >>>", req.files);
   sampleFile = req.files.sampleFile;
 
-  uploadPath = __dirname + "/public/uploads/" + sampleFile.name;
+  uploadPath = __dirname + "/media/" + sampleFile.name;
 
   sampleFile.mv(uploadPath, function(err) {
     if (err) {
