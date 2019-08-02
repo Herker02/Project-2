@@ -3,6 +3,7 @@
     "username": "root",
     "password": null,
     "database": "playlist_db",
+
     "host": "localhost",
     "dialect": "mysql"
   },

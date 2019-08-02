@@ -1,3 +1,4 @@
+
 // Get references to page elements
 var $exampleText = $("#example-text");
 var $exampleDescription = $("#example-description");
@@ -97,3 +98,24 @@ var handleDeleteBtnClick = function() {
 // Add event listeners to the submit and delete buttons
 $submitBtn.on("click", handleFormSubmit);
 $exampleList.on("click", ".delete", handleDeleteBtnClick);
+
+$(document).ready(function () {
+  $("#jquery_jplayer_1").jPlayer({
+    ready: function () {
+      $(this).jPlayer("setMedia", {
+        title: "Passenger",
+        mp3: "./media/Passenger.mp3"
+      });
+    },
+    cssSelectorAncestor: "#jp_container_1",
+    swfPath: "/js",
+    supplied: "mp3",
+    useStateClassSkin: true,
+    autoBlur: false,
+    smoothPlayBar: true,
+    keyEnabled: true,
+    remainingDuration: true,
+    toggleDuration: true
+  });
+});
+
