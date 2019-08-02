@@ -15,26 +15,22 @@ app.use(express.static("public"));
 app.use(fileUpload());
 
 // express upload
-app.post('/upload', function (req, res) {
+app.post("/upload", function(req, res) {
+  res.sendFile(path.join(__dirname, "/index.handlebars"));
   var sampleFile;
   var uploadPath;
-
-  if (Object.keys(req.files).length == 0) {
-    res.status(400).send('No files were uploaded.');
+  var fileName;
+  if (Object.keys(req.files).length === 0) {
+    res.status(400).send("No files were uploaded.");
     return;
   }
-
-  console.log('req.files >>>', req.files);
+  fileName = req.body.fileName;
   sampleFile = req.files.sampleFile;
-
-  uploadPath = __dirname + '/public/uploads/' + sampleFile.name;
-
-  sampleFile.mv(uploadPath, function (err) {
+  uploadPath = __dirname + "/media/" + fileName + ".mp3";
+  sampleFile.mv(uploadPath, function(err) {
     if (err) {
       return res.status(500).send(err);
     }
-
-    res.send('File uploaded to ' + uploadPath);
   });
 });
 // Handlebars

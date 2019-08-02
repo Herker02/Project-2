@@ -14,23 +14,36 @@ app.post("/upload", function(req, res) {
   res.sendFile(path.join(__dirname, "/upload.html"));
   var sampleFile;
   var uploadPath;
-
+  var fileName;
   if (Object.keys(req.files).length === 0) {
     res.status(400).send("No files were uploaded.");
     return;
   }
-
-  console.log("req.files >>>", req.files);
+  fileName = req.body.fileName;
+  //!!!!!need to update
+  var con = mysql.createConnection({
+    host: "localhost",
+    user: "myusername",
+    password: "mypassword",
+    database: "mydb"
+  });
+  
+  con.connect(function(err) {
+    if (err) throw err;
+    console.log("Connected!");
+    //!!!!!Insert a record in the "music" table:
+    var sql = "INSERT INTO customers (name, address) VALUES ('Company Inc', 'Highway 37')";
+    con.query(sql, function (err, result) {
+      if (err) throw err;
+      console.log("1 record inserted");
+    });
+  });
   sampleFile = req.files.sampleFile;
-
-  uploadPath = __dirname + "/media/" + sampleFile.name;
-
+  uploadPath = __dirname + "/media/" + fileName + ".mp3";
   sampleFile.mv(uploadPath, function(err) {
     if (err) {
       return res.status(500).send(err);
     }
-    console.log("return to main page");
-    //res.send("File uploaded to " + uploadPath);
   });
 });
 

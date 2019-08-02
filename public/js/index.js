@@ -94,6 +94,13 @@ var handleDeleteBtnClick = function() {
   });
 };
 
+
+// link to upload page
+$("#upload").on("click", uploadForm){
+  res.sendFile(path.join(__dirname+"/upload.handlebars"));
+}
+
+
 // Add event listeners to the submit and delete buttons
 $submitBtn.on("click", handleFormSubmit);
 $exampleList.on("click", ".delete", handleDeleteBtnClick);
