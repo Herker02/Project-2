@@ -1,4 +1,3 @@
-
 // Get references to page elements
 var $exampleText = $("#example-text");
 var $exampleDescription = $("#example-description");
@@ -7,7 +6,7 @@ var $exampleList = $("#example-list");
 
 // The API object contains methods for each kind of request we'll make
 var API = {
-  saveExample: function(example) {
+  saveExample: function (example) {
     return $.ajax({
       headers: {
         "Content-Type": "application/json"
@@ -17,24 +16,53 @@ var API = {
       data: JSON.stringify(example)
     });
   },
-  getExamples: function() {
+  getExamples: function () {
     return $.ajax({
       url: "api/example",
       type: "GET"
     });
   },
-  deleteExample: function(id) {
+  deleteExample: function (id) {
     return $.ajax({
       url: "api/example/" + id,
       type: "DELETE"
+    });
+  },
+  saveSong: function (songs) {
+    return $.ajax({
+      headers: {
+        "Content-Type": "application/json"
+      },
+      type: "POST",
+      url: "api/song",
+      data: JSON.stringify(songs)
+    });
+  },
+  getSong: function (songs) {
+    return $.ajax({
+      url: "api/song",
+      type: "GET"
+    });
+  },
+  deleteSong: function (id) {
+    return $.ajax({
+      url: "api/song/" + id,
+      type: "DELETE"
+    });
+  },
+  addToPlaylist: function (playlistId, songId) {
+    return $.ajax({
+      url: `api/pldata/${playlistId}`,
+      type: "POST",
+      data: songId
     });
   }
 };
 
 // refreshExamples gets new examples from the db and repopulates the list
-var refreshExamples = function() {
-  API.getExamples().then(function(data) {
-    var $examples = data.map(function(example) {
+var refreshExamples = function () {
+  API.getExamples().then(function (data) {
+    var $examples = data.map(function (example) {
       var $a = $("<a>")
         .text(example.playlist_name)
         .attr("href", "/example/" + example.id);
@@ -62,7 +90,7 @@ var refreshExamples = function() {
 
 // handleFormSubmit is called whenever we submit a new example
 // Save the new example to the db and refresh the list
-var handleFormSubmit = function(event) {
+var handleFormSubmit = function (event) {
   event.preventDefault();
 
   var example = {
@@ -75,7 +103,7 @@ var handleFormSubmit = function(event) {
     return;
   }
 
-  API.saveExample(example).then(function() {
+  API.saveExample(example).then(function () {
     refreshExamples();
   });
 
@@ -85,12 +113,12 @@ var handleFormSubmit = function(event) {
 
 // handleDeleteBtnClick is called when an example's delete button is clicked
 // Remove the example from the db and refresh the list
-var handleDeleteBtnClick = function() {
+var handleDeleteBtnClick = function () {
   var idToDelete = $(this)
     .parent()
     .attr("data-id");
 
-  API.deleteExample(idToDelete).then(function() {
+  API.deleteExample(idToDelete).then(function () {
     refreshExamples();
   });
 };
@@ -117,5 +145,27 @@ $(document).ready(function () {
     remainingDuration: true,
     toggleDuration: true
   });
-});
+  $("#add-song").click(function () {
+    event.preventDefault();
 
+    var songs = {
+      song_title: $("#song-name").val().trim(),
+      artist: $("#artist").val().trim(),
+      genre: $("#genre").val().trim()
+    };
+
+    if (!(songs.song_title && songs.artist && songs.genre)) {
+      alert("You must enter song information!");
+      return;
+    }
+
+    API.saveSong(songs).then(function () {
+      refreshExamples();
+      API.addToPlaylist(songs);
+    });
+
+    $("#song-name").val("");
+    $("#artist").val("");
+    $("#genre").val("");
+  });
+});
