@@ -7,7 +7,7 @@
     "start": "node server.js",
     "lint": "eslint --quiet .",
     "fix": "eslint --fix .",
-    "test": "npm run lint && cross-env NODE_ENV=test mocha -u tdd --reporter spec --exit"
+    "test": "npm run lint"
   },
   "license": "ISC",
   "dependencies": {
@@ -17,7 +17,7 @@
     "express-handlebars": "^3.1.0",
     "jplayer": "^2.9.2",
     "mysql2": "^1.6.5",
-    "sequelize": "^5.8.6"
+    "sequelize": "^5.11.0"
   },
   "devDependencies": {
     "chai": "^4.2.0",
