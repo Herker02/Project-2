@@ -1,0 +1,30 @@
+<body>
+
+  <body id="body-home">
+
+
+    <div id="home">
+      <div class="container">
+        <div class="row">
+          <div class="col-8 offset-2">
+            <h1 class="center-text">{{msg}}</h1>
+            <div id="borderblock">
+              <h3 class="sub-title">Upload Music Below </h2>
+                <form class="clearfix mb-4" ref='uploadForm' id='uploadForm' action='/upload' method='post'
+                  encType="multipart/form-data">
+                  <label for="example-text" name="form-fields">Enter Song Name</label>
+                  <input type="text" name="fileName" value=""><br>
+                  <input type="file" name="sampleFile" />
+                  <button id="submit" class="btn btn-primary float-right">Submit</button>
+                </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="/js/index.js"></script>
+  {{!-- <button onclick="window.location.href='/form'">back to home!</button> --}}
+</body>

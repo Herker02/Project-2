@@ -1,18 +1,39 @@
-require("dotenv").config();
+//require("dotenv").config();
 var express = require("express");
 var exphbs = require("express-handlebars");
+var fileUpload = require('express-fileupload');
 
 var db = require("./models");
 
 var app = express();
-var PORT = process.env.PORT || 3000;
+var PORT = process.env.PORT || 8080;
 
 // Middleware
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(express.static("public"));
+app.use(fileUpload());
 
-//Handlebars
+// express upload
+app.post("/upload", function(req, res) {
+  res.sendFile(path.join(__dirname, "/index.handlebars"));
+  var sampleFile;
+  var uploadPath;
+  var fileName;
+  if (Object.keys(req.files).length === 0) {
+    res.status(400).send("No files were uploaded.");
+    return;
+  }
+  fileName = req.body.fileName;
+  sampleFile = req.files.sampleFile;
+  uploadPath = __dirname + "/media/" + fileName + ".mp3";
+  sampleFile.mv(uploadPath, function(err) {
+    if (err) {
+      return res.status(500).send(err);
+    }
+  });
+});
+// Handlebars
 app.engine(
   "handlebars",
   exphbs({
