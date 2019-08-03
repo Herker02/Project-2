@@ -1,6 +1,4 @@
 <body id="body-home">
-
-
   <div id="home">
     <div class="container">
       <div class="row">
@@ -29,8 +27,15 @@
             <ul id="example-list" class="list-group">
               {{#each examples}}
               <li data-id="{{this.id}}" class="list-group-item">
-                <a href="example/{{this.id}}">{{this.text}}</a>
+                <a href="example/{{this.id}}">{{this.playlist_name}}</a>
+                <form>
+                  <input type="text" placeholder="Song Name" id="song-name">
+                  <input type="text" placeholder="Artist" id="artist">
+                  <input type="text" placeholder="Genre" id="genre">
+                </form>
                 <button class="btn btn-danger float-right delete">ｘ</button>
+                <button type="button" id="add-song" class="btn btn-success float-right">Add Song</button>
+
               </li>
               {{/each}}
             </ul>
@@ -40,5 +45,5 @@
   </div>
 </body>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-<script src="./js/index.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
